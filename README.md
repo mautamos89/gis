@@ -4,7 +4,7 @@
 
 Aquí es donde guardo los códigos que he desarrollado para varios proyectos de GIS, procesamiento de datos alfanuméricos, datos geográficos, bases de datos espaciales, y más.
 
-Python es el lenguaje de programación más comúnmente utilizado en el repositorio, pero también he trabajado en proyectos utilizando JavaScript, SQL, entre otros.
+Python es el lenguaje de programación más utilizado en el repositorio, pero también he trabajado en proyectos utilizando JavaScript, SQL, entre otros.
 
 El repositorio organiza los lenguajes y herramientas por carpeta, con el título y la fecha de cada desarrollo conservados en el nombre del archivo.
 
