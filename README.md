@@ -1,6 +1,6 @@
 # GIS Repository
 
-*Español*
+## *Español*
 
 Aquí es donde guardo los códigos que he desarrollado para varios proyectos de GIS, procesamiento de datos alfanuméricos, datos geográficos, bases de datos espaciales, y más.
 
@@ -8,7 +8,7 @@ Python es el lenguaje de programación más utilizado en el repositorio, pero ta
 
 El repositorio organiza los lenguajes y herramientas por carpeta, con el título y la fecha de cada desarrollo conservados en el nombre del archivo.
 
-*English*
+## *English*
 
 Here is where I store the codes that I have developed for various GIS projects, processing alphanumeric data, geographic data, spatial databases, and more.
 
