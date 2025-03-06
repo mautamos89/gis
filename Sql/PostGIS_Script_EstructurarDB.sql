@@ -31,7 +31,6 @@ create table comarca (
 
 -- espacio_natural
 create table espacio_natural (
--- 	EsnatId serial primary key,
 	EsnaCod varchar(3) primary key,
 	EsnaNom varchar(50) not null, -- índice
 	EsnaSuper decimal(11,2),
@@ -89,7 +88,8 @@ create table incidencia(
 	IncidFec date not null,
 	IncidLat numeric not null,
 	IncidLon numeric not null,
-	IncidDesc varchar(100) not null 
+	IncidDesc varchar(100) not null,
+	geom geometry(point, 4326) not null -- Geometría | índice
 );
 
 -- Importar datos de forma masiva
@@ -100,7 +100,7 @@ copy coord_tecnico from 'D:\msc\3_bases_datos_espaciales\practica_3\coord_tecnic
 copy parque_comarca (ParId, ComId, CordTecDni)
 from 'D:\msc\3_bases_datos_espaciales\practica_3\parque_comarca.csv' delimiter ';' csv header;
 copy agente_rural from 'D:\msc\3_bases_datos_espaciales\practica_3\agente_rural.csv' delimiter ';' csv header;
-copy incidencia(AgeRurDni, IncidFec, IncidLat, IncidLon, IncidDesc)
+copy incidencia(AgeRurDni, IncidFec, IncidLat, IncidLon, IncidDesc, geom)
 from 'D:\msc\3_bases_datos_espaciales\practica_3\incidencia.csv' delimiter ';' csv header;
 
 -- Validar registros importados
@@ -142,3 +142,4 @@ create index idx_parque_comarca_comid on parque_comarca(ComId);
 create index idx_parque_comarca_cordtecdni on parque_comarca(CordTecDni);
 create index idx_agente_rural_parid on agente_rural(ParId);
 create index idx_incidencia_agerurdni on incidencia(AgeRurDni);
+create index idx_incidencia_geom on incidencia using gist(geom);
