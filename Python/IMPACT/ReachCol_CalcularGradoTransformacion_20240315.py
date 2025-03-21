@@ -1,11 +1,11 @@
 # coding=utf-8
-# Título: Identificar y copiar feature classes de una carpeta a Base de Datos Geográfica (GDB)
+# Título: Identificar el grado de transformación de cobertura de la tierra por unidad político-administrativa
 # Requerimientos: ArcGIS Pro, Python 3x
 # Librerías: arcpy, os, time
 # Autor: Equipo SIG / DATA | ACTED - REACH
-# Fecha: 2024-03-08 
+# Fecha: 2024-03-18 
 
-import arcpy,os,time
+import arcpy, os, time, re
 from time import strftime
 from arcpy import env # type: ignore
 arcpy.env.overwriteOutput = True
@@ -14,20 +14,29 @@ arcpy.env.overwriteOutput = True
 print("inicio de script: ".upper() + strftime("%Y-%m-%d %H:%M:%S"))
 
 # Parámetros usuario
-dpto = 'valle' # Must
-capa_dpto = 'dv_Departamento' # Must
-cobertura = 'cobertura_tierra2000_2002V2' # Must
-campo_lvl3 = 'nivel3' # Must
+cobertura = 'cobertura_tierra_clc_2018' # Capa de coberturas de la tierra a usar
+capa_dpto = 'dv_Municipio' # Capa político administrativa a usar
+dpto = 'puerto asís' # Entidad de interés
+
+# Parámetros condicionales
+nums = re.findall(r'\d+', cobertura)
+cob_year = f"cob_{'_'.join(nums)}"
+if cobertura == 'cobertura_tierra_clc_2018':
+    campo_lvl3 = 'nivel_3'
+elif cobertura == 'Cobertura_tierra_2010_2012':
+    campo_lvl3 = 'leyenda3n'
+else:
+    campo_lvl3 = 'nivel3'
 
 # Parámetros fijos
+campo_nom_dpto = 'NOM_MUNICI' # 'NOM_DEPART' analizar nivel departamental; 'NOM_MUNICI' analizar nivel municipal
 memory = 'memory'
 temporal = os.path.join(memory,cobertura + '_mem')
 campo_cod = 'LCod'
 campo_gtrans = 'GTransform'
-dpto_tmp = os.path.join(memory,dpto + '_mem')
+dpto_tmp = os.path.join(memory,dpto.lower().replace(' ','_') + '_'  + cob_year + '_mem')
 campo_ha = 'AreaHa'
-campo_nom_dpto = 'NOM_DEPART'
-dpto_dis = os.path.join(memory,dpto + '_dis')
+dpto_dis = os.path.join(memory,dpto.lower().replace(' ','_') + '_' + cob_year + '_dis')
 
 # Diccionario Corine Land Cover y valores de transformación
 dic_corine_trans = {'Natural': (311,312,313,314,315,321,322,323,331,332,333,335,411,412,413,421,422,423,511,512,521,522),
@@ -36,13 +45,17 @@ dic_corine_trans = {'Natural': (311,312,313,314,315,321,322,323,331,332,333,335,
 
 # Función para regresar valor de transformación
 def buscar_llave(valor, dic):
+    """
+    Función que regresa la categría de la cobertura
+    """
     for key, values in dic.items():
         if valor in values:
             return key
-    return None #return 'No encontrado'
+    #return None #return 'No encontrado'
+    return 'Nubes' # Valores no encontrados son nubes
 
 # Geoprocesamiento municipio
-print('Iniciando geoprocesamiento')
+print(f'Iniciando geoprocesamiento\nCapa: {cobertura}, Campo: {campo_lvl3}')
 arcpy.SelectLayerByAttribute_management(capa_dpto, 'NEW_SELECTION',f"lower({campo_nom_dpto}) LIKE '%{dpto.lower()}%'")
 print('Cortando entidades geográficas')
 arcpy.Clip_analysis(cobertura,capa_dpto,dpto_tmp)
@@ -62,11 +75,12 @@ resultado = f'buscar_llave(!{campo_cod}!, {dic_corine_trans})' # Llamar la funci
 arcpy.CalculateField_management(dpto_tmp,campo_gtrans,resultado,'PYTHON3') # Calcular el campo aplicando función
 
 # Disolviendo y calculando pocentajes de ocupación
+print('Disolviendo y calculando porcentajes de ocupación')
 arcpy.Dissolve_management(dpto_tmp,dpto_dis, campo_gtrans, [[campo_ha,'SUM']])
 lista_area = []
 with arcpy.da.SearchCursor(dpto_dis, 'SUM_AreaHa') as cursor:
     for row in cursor:
-        lista_area.append(round(row[0],3))
+        lista_area.append(row[0])
 arcpy.AddField_management(dpto_dis,'Porcentaje','FLOAT')
 arcpy.CalculateField_management(dpto_dis,'Porcentaje',f"round((!SUM_AreaHa! / {sum(lista_area)})*100,3)")
 
