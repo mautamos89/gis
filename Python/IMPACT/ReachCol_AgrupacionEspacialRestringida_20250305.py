@@ -20,12 +20,13 @@ for a in range(1, 5):
     
     # Get the count as an integer
     count = arcpy.da.TableToNumPyArray(seleccion, ['OID@']).shape[0]
+    print(f"Numero de puntos: {count}")
     
     # Condicional si el número de puntos es >= a la cuota mínima de cluster
     if count > 7:
         print(f"Procesando hexa_id: {a}")
         arcpy.stats.SpatiallyConstrainedMultivariateClustering(
-            in_features="construccion_union_punto",
+            in_features=capa,
             output_features=rf"memory\cluster_py_{a}",
             analysis_fields="latitud;longitud",
             size_constraints="NONE",
