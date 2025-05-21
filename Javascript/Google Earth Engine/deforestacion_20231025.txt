@@ -1,0 +1,38 @@
+// Paso 1: Cargar el límite del municipio de Barbacoas
+var barbacoas = ee.FeatureCollection("projects/ee-lguzman61/assets/Barbacoas");
+print('Límite de Barbacoas:', barbacoas);
+
+// Cargar el polígono en el mapa
+Map.centerObject(barbacoas, 10);
+Map.addLayer(barbacoas, {color: 'blue'}, 'Límite de Barbacoas');
+
+// Paso 2: Cargar los datos de pérdida de bosque del conjunto de datos Hansen
+var dataset = ee.Image('UMD/hansen/global_forest_change_2023_v1_11');
+
+// Visualizar la cobertura de árboles en el año 2000
+var treeCoverVisParam = {
+  bands: ['treecover2000'],
+  min: 0,
+  max: 100,
+  palette: ['black', 'green']
+};
+Map.addLayer(dataset, treeCoverVisParam, 'Cobertura de Árboles 2000');
+
+// Visualizar el año de pérdida de bosque
+var treeLossVisParam = {
+  bands: ['lossyear'],
+  min: 0,
+  max: 23,
+  palette: ['yellow', 'red']
+};
+Map.addLayer(dataset, treeLossVisParam, 'Año de Pérdida de Bosque');
+
+// Paso 3: Exportar la capa de pérdida de bosque recortada a Barbacoas
+Export.image.toDrive({
+  image: dataset.select(['lossyear']).clip(barbacoas),
+  description: 'treeLossyear_20002023_Barbacoas',
+  region: barbacoas.geometry(),
+  folder: 'EarthEngineImages',
+  scale: 30,
+  crs: 'EPSG:4326'
+});

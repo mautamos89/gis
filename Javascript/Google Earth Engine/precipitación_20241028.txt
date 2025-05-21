@@ -1,0 +1,52 @@
+// Paso 1: Cargar el límite del municipio de Barbacoas
+var barbacoas = ee.FeatureCollection("projects/ee-lguzman61/assets/Barbacoas");
+
+// Visualizar el límite en el mapa
+Map.centerObject(barbacoas, 10);
+Map.addLayer(barbacoas, {color: 'blue'}, 'Límite de Barbacoas');
+
+// Paso 2: Cargar la colección de precipitación CHIRPS y filtrar por fechas y región
+var dataset = ee.ImageCollection("UCSB-CHG/CHIRPS/DAILY")
+                  .select('precipitation')
+                  .filter(ee.Filter.date('1981-01-01', '2023-12-31'))
+                  .filterBounds(barbacoas);
+
+// Visualizar la colección en el mapa
+Map.addLayer(dataset.first(), {min: 0, max: 100, palette: ['white', 'blue']}, 'Precipitación');
+
+// Paso 3: Seleccionar múltiples reductores
+var reducers_all = ee.Reducer.mean()
+                                .combine(ee.Reducer.count(), null, true)
+                                .combine(ee.Reducer.stdDev(), null, true);
+
+// Paso 4: Reducir la colección de imágenes en la región de interés
+var results = dataset.map(function(image) {
+  return image.reduceRegions({
+    collection: barbacoas,
+    reducer: reducers_all,
+    scale: 1000
+  }).map(function(f) {
+    // Agregar una propiedad de fecha a cada entidad de salida
+    return f.set('date', image.date().format("YYYY-MM-d"));
+  });
+});
+
+// Paso 5: Crear una FeatureCollection a partir de los resultados
+var results_fin = ee.FeatureCollection(results).flatten();
+
+// Revisar cómo se ven los puntos sobrepuestos y seleccionar las columnas necesarias para exportar
+print(results_fin.first(), 'Primer resultado');
+
+// Paso 6: Seleccionar solo los puntos que se sobreponen con imágenes
+var results_sel = results_fin.filterMetadata('count', "not_equals", 0);
+
+// Revisar cómo se ven los puntos filtrados
+print(results_sel.first(), 'Punto filtrado');
+
+// Paso 7: Exportar la FeatureCollection
+Export.table.toDrive({
+  collection: results_sel,
+  description: "Precipitation_Barbacoas",
+  fileFormat: 'CSV',
+  selectors: ["Mnteqa_Cod", "date", "mean"]
+});
