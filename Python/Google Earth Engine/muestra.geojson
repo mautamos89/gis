@@ -1,0 +1,27 @@
+{
+"type": "FeatureCollection",
+"name": "muestra",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 1, "cobertura": "Bosque", "codigo": 1 }, "geometry": { "type": "Point", "coordinates": [ -74.209889499019837, 11.208313154446023 ] } },
+{ "type": "Feature", "properties": { "id": 2, "cobertura": "Bosque", "codigo": 1 }, "geometry": { "type": "Point", "coordinates": [ -74.220465185305713, 11.219167373798598 ] } },
+{ "type": "Feature", "properties": { "id": 3, "cobertura": "Bosque", "codigo": 1 }, "geometry": { "type": "Point", "coordinates": [ -74.170269241564682, 11.257433532037247 ] } },
+{ "type": "Feature", "properties": { "id": 4, "cobertura": "Bosque", "codigo": 1 }, "geometry": { "type": "Point", "coordinates": [ -74.144189976274617, 11.251314374818342 ] } },
+{ "type": "Feature", "properties": { "id": 5, "cobertura": "Bosque", "codigo": 1 }, "geometry": { "type": "Point", "coordinates": [ -74.138585033948047, 11.203783778269274 ] } },
+{ "type": "Feature", "properties": { "id": 6, "cobertura": "Urbano", "codigo": 2 }, "geometry": { "type": "Point", "coordinates": [ -74.221990689486361, 11.19284814155874 ] } },
+{ "type": "Feature", "properties": { "id": 7, "cobertura": "Urbano", "codigo": 2 }, "geometry": { "type": "Point", "coordinates": [ -74.185412870144248, 11.215109361273166 ] } },
+{ "type": "Feature", "properties": { "id": 8, "cobertura": "Urbano", "codigo": 2 }, "geometry": { "type": "Point", "coordinates": [ -74.168105253892776, 11.248546184647875 ] } },
+{ "type": "Feature", "properties": { "id": 9, "cobertura": "Urbano", "codigo": 2 }, "geometry": { "type": "Point", "coordinates": [ -74.147519517702563, 11.230891473344037 ] } },
+{ "type": "Feature", "properties": { "id": 10, "cobertura": "Urbano", "codigo": 2 }, "geometry": { "type": "Point", "coordinates": [ -74.2098787862096, 11.243828263010608 ] } },
+{ "type": "Feature", "properties": { "id": 11, "cobertura": "Agua", "codigo": 3 }, "geometry": { "type": "Point", "coordinates": [ -74.238486274720401, 11.257300693190038 ] } },
+{ "type": "Feature", "properties": { "id": 12, "cobertura": "Agua", "codigo": 3 }, "geometry": { "type": "Point", "coordinates": [ -74.230258836442886, 11.239474576922087 ] } },
+{ "type": "Feature", "properties": { "id": 13, "cobertura": "Agua", "codigo": 3 }, "geometry": { "type": "Point", "coordinates": [ -74.240406010318495, 11.193675170510584 ] } },
+{ "type": "Feature", "properties": { "id": 14, "cobertura": "Agua", "codigo": 3 }, "geometry": { "type": "Point", "coordinates": [ -74.216820687256273, 11.259083304816834 ] } },
+{ "type": "Feature", "properties": { "id": 15, "cobertura": "Agua", "codigo": 3 }, "geometry": { "type": "Point", "coordinates": [ -74.236566539122322, 11.202313980701975 ] } },
+{ "type": "Feature", "properties": { "id": 16, "cobertura": "Pasto", "codigo": 4 }, "geometry": { "type": "Point", "coordinates": [ -74.111244353305551, 11.244206557618204 ] } },
+{ "type": "Feature", "properties": { "id": 17, "cobertura": "Pasto", "codigo": 4 }, "geometry": { "type": "Point", "coordinates": [ -74.114238042113485, 11.239300933100996 ] } },
+{ "type": "Feature", "properties": { "id": 18, "cobertura": "Pasto", "codigo": 4 }, "geometry": { "type": "Point", "coordinates": [ -74.187067698407446, 11.192081152491776 ] } },
+{ "type": "Feature", "properties": { "id": 19, "cobertura": "Pasto", "codigo": 4 }, "geometry": { "type": "Point", "coordinates": [ -74.167394886240999, 11.208823168472289 ] } },
+{ "type": "Feature", "properties": { "id": 20, "cobertura": "Pasto", "codigo": 4 }, "geometry": { "type": "Point", "coordinates": [ -74.186011102357568, 11.203313774783735 ] } }
+]
+}
